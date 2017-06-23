@@ -1,0 +1,2 @@
+Rint.Load:	$(HOME)/rootinit/rootalias.C
+Rint.Logon:     $(HOME)/rootinit/rootlogon.C
