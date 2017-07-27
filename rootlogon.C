@@ -1,37 +1,34 @@
 {
-    TStyle* myStyle = new TStyle("myStyle","My Root Styles");
+    gROOT->Macro("HallA_style.cxx");
 
-    myStyle->SetPalette(1);
-    myStyle->SetTitleX(0.5);
-    myStyle->SetTitleAlign(23);
-    myStyle->SetTitleBorderSize(0);
-    myStyle->SetTitleFillColor(0);
+    //gStyle->SetTitleX(0.5);
+    //gStyle->SetTitleAlign(23);
+    //gStyle->SetTitleBorderSize(0);
+    //gStyle->SetTitleFillColor(0);
 
-    myStyle->SetPadBottomMargin(0.12);
-    myStyle->SetPadTopMargin(0.08);
-    myStyle->SetPadLeftMargin(0.12);
-    //myStyle->SetPadRightMargin(0.1);
-    myStyle->SetPadRightMargin(0.06);
+    gStyle->SetPadTopMargin(0.10);
+    gStyle->SetPadLeftMargin(0.125);
+    gStyle->SetPadBottomMargin(0.10);
 
-    myStyle->SetPadTickX(1);
-    myStyle->SetPadTickY(1);
-    myStyle->SetPadGridX(0);
-    myStyle->SetPadGridY(0);
+    gStyle->SetPadTickX(1);
+    gStyle->SetPadTickY(1);
+    gStyle->SetPadGridX(0);
+    gStyle->SetPadGridY(0);
 
-    myStyle->SetOptStat(0);
-    myStyle->SetOptTitle(0);
-    myStyle->SetOptDate(0);
+    gStyle->SetLabelSize(0.04, "XYZ");
 
-    myStyle->SetFrameBorderMode(0);
-    myStyle->SetCanvasBorderMode(0);
-    myStyle->SetPadBorderMode(0);
-    myStyle->SetCanvasColor(0);
-    myStyle->SetPadColor(0);
+    gStyle->SetTitleFont(132, "XYZ");
+    gStyle->SetTitleSize(0.05, "XYZ");
 
-    myStyle->SetFuncColor(kRed);
+    //gStyle->SetOptStat(0);
+    //gStyle->SetOptTitle(0);
+    //gStyle->SetOptDate(0);
 
-    myStyle->SetTitleFont(132,"xyz");
-    myStyle->SetTitleSize(0.05,"xyz");
-    myStyle->SetLabelSize(0.04,"xyz");
-    //myStyle->SetTitleOffset(1.2,"y");
+    //gStyle->SetFrameBorderMode(0);
+    //gStyle->SetCanvasBorderMode(0);
+    //gStyle->SetPadBorderMode(0);
+    //gStyle->SetCanvasColor(0);
+    //gStyle->SetPadColor(0);
+
+    //gStyle->SetFuncColor(kRed);
 }

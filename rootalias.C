@@ -21,6 +21,7 @@ const char* PATHS[] = {
     "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-11",
     "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-12",
     "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-9",
+    "/LaCie/gmp12/rootfiles/Fall2016/Carbon",
 //    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles",
 //    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-4",
 //    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-6",
@@ -52,7 +53,7 @@ const char* PATHS[] = {
 //    "/LaCie/gmp12/rootfiles/Fall2016-old/ROptics",
 //    "/LaCie/gmp12/rootfiles/Fall2016-old/Inelastic",
 //    "/LaCie/gmp12/rootfiles/Spring2015",
-    "/LaCie/gmp12/rootfiles/other",
+//    "/LaCie/gmp12/rootfiles/other",
     0
 };
 
@@ -83,7 +84,7 @@ TChain* LoadGmpRun(Int_t run, const char* path, const char* tree, Int_t debug = 
 	rootfile.Prepend(dir.Data());
     }
 
-    if (!T->GetEntries()) {
+    if (split<=0) {
 	if (debug>0) cerr << "Can not find ROOT file for run " << run << endl;
 	delete T;
 	T = 0;
