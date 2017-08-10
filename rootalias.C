@@ -1,61 +1,40 @@
 // The paths to store ROOT files
-const char* PATHS[] = {
-    "/LaCie/data/other",
-    "/LaCie/gmp12/rootfiles/Fall2016/K3-4",
-    "/LaCie/gmp12/rootfiles/Fall2016/K3-6",
-    "/LaCie/gmp12/rootfiles/Fall2016/K3-7",
-    "/LaCie/gmp12/rootfiles/Fall2016/K3-8",
-    "/LaCie/gmp12/rootfiles/Fall2016/K3-9",
-    "/LaCie/gmp12/rootfiles/Fall2016/K4-10",
-    "/LaCie/gmp12/rootfiles/Fall2016/K4-11",
-    "/LaCie/gmp12/rootfiles/Fall2016/K4-12",
-    "/LaCie/gmp12/rootfiles/Fall2016/K4-9",
-    "/LaCie/gmp12/rootfiles/Fall2016/KP4",
-    "/LaCie/gmp12/rootfiles/Fall2016/KP5",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K3-4",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K3-6",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K3-7",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K3-8",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K3-9",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-10",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-11",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-12",
-    "/LaCie/gmp12/rootfiles/Fall2016/Al/K4-9",
-    "/LaCie/gmp12/rootfiles/Fall2016/Carbon",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-4",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-6",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-7",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-8",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K3-9",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K4-10",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K4-11",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K4-12",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/K4-9",
-//    //"/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/KP4",
-//    "/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/KP5",
-//    //"/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/LOptics",
-//    //"/work/halla/gmp12/longwu/gmp_analysis/rootfiles/Fall2016/ROptics",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/KP4",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/KP5",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K3-4",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K3-6",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K3-7",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K3-8",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K3-9",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K4-10",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K4-11",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K4-12",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/K4-9",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/KP4",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/KP5",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/LOptics",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/ROptics",
-//    "/LaCie/gmp12/rootfiles/Fall2016-old/Inelastic",
-//    "/LaCie/gmp12/rootfiles/Spring2015",
-//    "/LaCie/gmp12/rootfiles/other",
-    0
-};
+vector<string> PATHS;
+
+void GenPathList()
+{
+    TString rootdir = gSystem->Getenv("ROOTFILEDIR");
+    if (rootdir.Length()==0) {
+        Info("rootalias.C","The path to ROOT files is not set.");
+        return;
+    }
+
+    PATHS.push_back(rootdir.Data());
+
+    Int_t curr_dir = 0;
+
+    while (curr_dir<PATHS.size()) {
+        TSystemDirectory folder(PATHS[curr_dir].c_str(), PATHS[curr_dir].c_str());
+        TList* files = folder.GetListOfFiles();
+
+        if (files) {
+            files->Sort();
+            TSystemFile* file = 0;
+
+            TIter next(files);
+
+            while ( file = (TSystemFile*)next() ) {
+                if ( file->IsDirectory() && strcmp(file->GetName(),".")!=0 && strcmp(file->GetName(),"..")!=0 ) {
+                    PATHS.push_back(file->GetTitle());
+                }
+            }
+        }
+
+        curr_dir++;
+
+        //if (PATHS.size()>10) return;
+    }
+}
 
 // Chain all the ROOT files for a given run number and return the TChain
 //      run   --- run number
@@ -103,8 +82,10 @@ TChain* LoadGmpRun(Int_t run, const char* tree = "T")
 
     TChain* T = 0;
 
-    while (PATHS[i]) {
-	T = LoadGmpRun(run,PATHS[i++],tree,0);
+    if (PATHS.size()==0) GenPathList();
+
+    while (i<PATHS.size()) {
+	T = LoadGmpRun(run,PATHS[i++].c_str(),tree,0);
 	if (T) break;
     }
 
