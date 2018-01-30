@@ -23,7 +23,7 @@ void GenPathList()
 
             TIter next(files);
 
-            while ( file = (TSystemFile*)next() ) {
+            while ( (file = (TSystemFile*)next()) ) {
                 if ( file->IsDirectory() && strcmp(file->GetName(),".")!=0 && strcmp(file->GetName(),"..")!=0 ) {
                     PATHS.push_back(file->GetTitle());
                 }

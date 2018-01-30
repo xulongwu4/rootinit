@@ -1,5 +1,5 @@
 {
-    gROOT->Macro("HallA_style.cxx");
+    gROOT->Macro("/home/oulongwu/rootinit/HallA_style.cxx");
 
     //gStyle->SetTitleX(0.5);
     //gStyle->SetTitleAlign(23);
