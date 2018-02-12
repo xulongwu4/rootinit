@@ -1,5 +1,5 @@
 // The paths to store ROOT files
-vector<string> PATHS;
+vector<string> Paths;
 
 void GenPathList()
 {
@@ -9,12 +9,12 @@ void GenPathList()
         return;
     }
 
-    PATHS.push_back(rootdir.Data());
+    Paths.push_back(rootdir.Data());
 
     Int_t curr_dir = 0;
 
-    while (curr_dir<PATHS.size()) {
-        TSystemDirectory folder(PATHS[curr_dir].c_str(), PATHS[curr_dir].c_str());
+    while (curr_dir<Paths.size()) {
+        TSystemDirectory folder(Paths[curr_dir].c_str(), Paths[curr_dir].c_str());
         TList* files = folder.GetListOfFiles();
 
         if (files) {
@@ -25,14 +25,14 @@ void GenPathList()
 
             while ( (file = (TSystemFile*)next()) ) {
                 if ( file->IsDirectory() && strcmp(file->GetName(),".")!=0 && strcmp(file->GetName(),"..")!=0 ) {
-                    PATHS.push_back(file->GetTitle());
+                    Paths.push_back(file->GetTitle());
                 }
             }
         }
 
         curr_dir++;
 
-        //if (PATHS.size()>10) return;
+        //if (Paths.size()>10) return;
     }
 }
 
@@ -73,7 +73,7 @@ TChain* LoadGmpRun(Int_t run, const char* path, const char* tree, Int_t debug = 
 }
 
 // Load TTree "tree" form all the ROOT files generated from a specific run
-// The ROOT files are searched for from the given "PATHS" array given at the beginning of the file
+// The ROOT files are searched for from the given "Paths" array given at the beginning of the file
 //      run  --- run number
 //      tree --- The name of the tree to be loaded
 TChain* LoadGmpRun(Int_t run, const char* tree = "T")
@@ -82,10 +82,10 @@ TChain* LoadGmpRun(Int_t run, const char* tree = "T")
 
     TChain* T = 0;
 
-    if (PATHS.size()==0) GenPathList();
+    if (Paths.size()==0) GenPathList();
 
-    while (i<PATHS.size()) {
-	T = LoadGmpRun(run,PATHS[i++].c_str(),tree,0);
+    while (i<Paths.size()) {
+	T = LoadGmpRun(run,Paths[i++].c_str(),tree,0);
 	if (T) break;
     }
 
