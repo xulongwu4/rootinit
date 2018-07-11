@@ -15,6 +15,8 @@
     gStyle->SetPadGridX(0);
     gStyle->SetPadGridY(0);
 
+    gStyle->SetLineWidth(2); // Line width of axis
+
     gStyle->SetLabelSize(0.04, "XYZ");
 
     gStyle->SetTitleFont(132, "XYZ");
